@@ -1,6 +1,11 @@
 # SnapGrid
 
-Project snapshots
+*Project snapshots*
+
+## Features
+
+- The url field only accepts a domain name
+- image size is hard-coded to 800 pixels
 
 ## Setup
 
