@@ -24,7 +24,7 @@ def index():
                     style="padding: 8px",
                 ),
                 Button("Snap", type="submit"),
-                Div(id="result", style="margin-top: 20px;"),
+                Div(id="result"),
                 hx_post="/fetch-url",
                 hx_target="#result",
             )
@@ -46,4 +46,4 @@ async def _(request: Request):
     base64_image = base64.b64encode(screenshot).decode("utf-8")
     data_url = f"data:image/png;base64,{base64_image}"
 
-    return Img(src=data_url, style="max-width: 800px; max-height: 800px;")
+    return Img(src=data_url)
