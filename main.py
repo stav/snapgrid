@@ -1,15 +1,15 @@
 import base64
-
 from starlette.requests import Request
 from fasthtml.common import *
 
 from config import fast_config
-from api import get_screenshot
+from app import get_screenshot
 
+# Create the FastHTML app
 app, rt = fast_app(**fast_config)
-serve()
 
 
+# Define routes
 @rt
 def index():
     return Titled(
@@ -47,3 +47,8 @@ async def _(request: Request):
     data_url = f"data:image/png;base64,{base64_image}"
 
     return Img(src=data_url)
+
+
+# Only run the server if this file is executed directly
+if __name__ == "__main__":
+    serve()
