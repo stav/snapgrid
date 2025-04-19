@@ -6,6 +6,23 @@
 
 .brick {
     width: 300px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.brick:hover {
+    transform: scale(1.02);
+}
+
+.brick img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fancybox__caption {
+    text-align: center;
 }
 
 .spinner {
