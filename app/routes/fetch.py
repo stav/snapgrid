@@ -20,6 +20,9 @@ async def fetch_route(request: Request):
     data_url = f"data:image/png;base64,{base64_image}"
 
     return Div(
-        Img(src=data_url),
+        Img(src=data_url, style="width: 100%; height: auto;"),
         cls="brick",
+        data_src=data_url,
+        data_caption=url,
+        data_fancybox="gallery",
     )
