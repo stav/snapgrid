@@ -9,8 +9,8 @@ from .api import get_screenshot
 async def fetch_route(request: Request):
     form = await request.form()
     url = form.get("url")
-    if not url:
-        return "Please enter a URL"
+    if not url or not isinstance(url, str):
+        return "Please enter a valid URL"
 
     # Get the screenshot of the URL
     screenshot = await get_screenshot(url)
