@@ -19,12 +19,12 @@ def index_route():
                     Span(
                         Svg(
                             Circle(
-                                cx="25",
-                                cy="25",
+                                cx=25,
+                                cy=25,
                                 r="20",
+                                cls="path",
                                 fill="none",
                                 stroke_width="5",
-                                cls="path",
                             ),
                             cls="spinner-svg",
                             viewBox="0 0 50 50",
