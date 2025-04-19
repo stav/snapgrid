@@ -1,4 +1,4 @@
-from fasthtml.common import Button, Div, Form, Input, Span, Style, Titled
+from fasthtml.common import Button, Div, Form, Input, Span, Titled
 from fasthtml.svg import Circle, Svg
 
 
@@ -45,53 +45,6 @@ def index_route():
                     Div(id="grid-head-node", style="display: none"),
                     cls="grid",
                 ),
-            ),
-            Style(
-                """
-                .grid {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: 10px;
-                }
-
-                .brick {
-                    width: 300px;
-                }
-
-                .spinner {
-                    visibility: hidden;
-                    display: inline-block;
-                    position: absolute;
-                    top: 20%;
-                    right: 30%;
-                }
-
-                .spinner.htmx-request  {
-                    visibility: visible;
-                }
-
-                .spinner-svg {
-                    animation: rotate 2s linear infinite;
-                    width: 20px;
-                    height: 20px;
-                }
-
-                .path {
-                    stroke: white;
-                    stroke-linecap: round;
-                    animation: dash 1.5s ease-in-out infinite;
-                }
-
-                @keyframes rotate {
-                    100% { transform: rotate(360deg); }
-                }
-
-                @keyframes dash {
-                    0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
-                    50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
-                    100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
-                }
-                """
             ),
         ),
     )
