@@ -6,6 +6,7 @@ from app.routes import router
 # Create the FastHTML app
 app, rt = fast_app(**fast_config)
 
+# All of the logic is in the router
 router(rt)
 
 # Only run the server if this file is executed directly
