@@ -39,7 +39,7 @@ def index_route():
                     Div(id="grid-head-node", style="display: none"),
                     cls="grid",
                 ),
-                hx_post="/fetch",
+                hx_post="/findsnap",
                 hx_swap="afterend",
                 hx_target="#grid-head-node",
                 hx_indicator="#spinner",
