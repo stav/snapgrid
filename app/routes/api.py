@@ -1,7 +1,7 @@
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
 
 
-async def get_screenshot(url: str) -> bytes:
+async def capture_screenshot(url: str) -> bytes:
     """
     Take a screenshot of the given URL using Playwright.
 
