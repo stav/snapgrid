@@ -32,7 +32,7 @@ async def get_or_capture_screenshot(url: str) -> bytes:
     return screenshot
 
 
-async def findsnap_route(request: Request):
+async def snap_route(request: Request):
     # Get the url from the form data
     form = await request.form()
     url = form.get("url")
