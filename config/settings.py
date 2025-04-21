@@ -4,6 +4,10 @@ from fasthtml.common import Link, StyleX, Script
 
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Create screenshots directory if it doesn't exist
+SCREENSHOT_DIR = "screenshots"
+SCREENSHOTS_PATH = Path("app", "static", SCREENSHOT_DIR)
+SCREENSHOTS_PATH.mkdir(parents=True, exist_ok=True)
 
 # FastHTML configuration
 base_config = {
