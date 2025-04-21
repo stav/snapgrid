@@ -4,6 +4,7 @@ from pathlib import Path
 from starlette.requests import Request
 from fasthtml.common import Div, Img
 
+from app.utils import get_valid_url
 from .api import capture_screenshot
 
 # Create screenshots directory if it doesn't exist
@@ -32,16 +33,7 @@ async def get_or_capture_screenshot(url: str) -> bytes:
     return screenshot
 
 
-async def snap_route(request: Request):
-    # Get the url from the form data
-    form = await request.form()
-    url = form.get("url")
-    if not url or not isinstance(url, str):
-        return "Please enter a valid URL"
-
-    # Get screenshot from file or capture new one
-    screenshot: bytes = await get_or_capture_screenshot(url)
-
+def wrap_snap(url: str, screenshot: bytes):
     # Convert bytes to base64 and create data URL
     base64_image: str = base64.b64encode(screenshot).decode("utf-8")
     data_url: str = f"data:image/png;base64,{base64_image}"
@@ -54,3 +46,17 @@ async def snap_route(request: Request):
         data_caption=f"{url} (Saved as: {filename(url)})",
         data_fancybox="gallery",
     )
+
+
+async def snap_route(request: Request):
+    # Validate and format the url from the form data
+    form = await request.form()
+    url = await get_valid_url(form)
+    if url is None:
+        return Div("URL is invalid", cls="error")
+
+    # Get screenshot from file or capture new one
+    screenshot: bytes = await get_or_capture_screenshot(url)
+
+    # Return the screenshot wrapped for the frontend
+    return wrap_snap(url, screenshot)
