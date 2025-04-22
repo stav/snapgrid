@@ -1,6 +1,6 @@
 import configparser
 from pathlib import Path
-from fasthtml.common import Link, StyleX, Script
+from fasthtml.common import Link, StyleX, Script, ScriptX
 
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,20 +19,21 @@ base_config = {
     "hdrs": [
         Link(rel="icon", href="/static/favicon.ico"),
         StyleX("app/styles.css"),
-        Link(
+        Link(  # Fancybox CSS
             rel="stylesheet",
             href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css",
         ),
-        Script(
+        Script(  # Fancybox JS
             src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js",
         ),
-        Script(
+        Script(  # Fancybox Bind
             """
             document.addEventListener('DOMContentLoaded', function() {
                 Fancybox.bind("[data-fancybox]");
             });
             """
         ),
+        ScriptX("app/markdown.js"),
         Script("//htmx.logAll();"),
     ],
 }

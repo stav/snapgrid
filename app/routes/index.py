@@ -1,4 +1,4 @@
-from fasthtml.common import Button, Div, Form, Input, Span, Titled
+from fasthtml.common import Button, Div, Form, H3, Input, P, Span, Titled
 from fasthtml.svg import Circle, Svg
 
 
@@ -46,5 +46,13 @@ def index_route():
                 Div(id="grid-head-node", style="display: none"),
                 cls="grid",
             ),
+        ),
+        Div(
+            H3("Custom Modal"),
+            P("Img: ${fancyboxDialog.querySelector('img').src}"),
+            P("Markdown: ${fancyboxDialog.querySelector('.markdown-text')}", id="markdown-text"),
+            Button("CloseME!", onclick="this.parentElement.style.display = 'none'"),
+            id="markdown-dialog",
+            style="display: none",
         ),
     )
