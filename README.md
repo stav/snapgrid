@@ -26,4 +26,9 @@ pip install -r requirements.txt
 python main.py
 ```
 
+## Usage
+
+The URL can have a space in it which then will use the later portion
+for the filename.
+
 The application will be available at http://localhost:5001

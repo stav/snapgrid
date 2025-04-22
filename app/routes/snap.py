@@ -5,32 +5,19 @@ from pathlib import Path
 from starlette.requests import Request
 from fasthtml.common import Div, Img
 
-from app.utils import get_valid_url
+from app.utils import get_url_filename
 from config import SCREENSHOTS_PATH, SCREENSHOT_DIR
 from .api import capture_screenshot
-
-
-def get_filename(url: str) -> str:
-    # Generate a filename based on URL
-    filename: str = (
-        url.replace("https://", "")
-        .replace("http://", "")
-        .replace("://", "_")
-        .replace("/", "_")
-        .strip("_")
-    )
-    return f"{filename}.png"
 
 
 async def snap_route(request: Request):
     # Validate and format the url from the form data
     form = await request.form()
-    url = await get_valid_url(form)
+    url, filename = get_url_filename(form)
     if url is None:
         return Div("URL is invalid", cls="error")
 
     # Cache new screenshot if one doesn't already exist
-    filename: str = get_filename(url)
     screenshot_path: Path = SCREENSHOTS_PATH / filename
     if not screenshot_path.exists():
         # Capture the screenshot
