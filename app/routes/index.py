@@ -1,8 +1,9 @@
 import json
-from fasthtml.common import Button, Div, Form, Img, Input, Span, Titled
+from fasthtml.common import Button, Div, Form, Input, Span, Titled
 from fasthtml.svg import Circle, Svg
 
-from config.settings import SCREENSHOT_DIR, SCREENSHOTS_PATH
+from config.settings import SCREENSHOTS_PATH
+from app.utils import lay_brick
 
 
 def index_route():
@@ -47,19 +48,12 @@ def index_route():
                 hx_on__after_request="this.disabled = false",
             ),
             Div(  # Grid for the blocks
+                # Grid head node
                 Div(id="grid-head-node", style="display: none"),
+                # Grid body nodes loaded from index.json
                 *(
                     [
-                        Div(
-                            Img(
-                                src=f"/static/{SCREENSHOT_DIR}/{filename}",
-                                style="width: 100%; height: auto;",
-                            ),
-                            cls="brick",
-                            data_src=f"/static/{SCREENSHOT_DIR}/{filename}",
-                            data_caption=f"{data['url']} (Saved as: {filename})",
-                            data_fancybox="gallery",
-                        )
+                        lay_brick(data["url"], filename)
                         for filename, data in json.loads(
                             (SCREENSHOTS_PATH / "index.json").read_text()
                         ).items()

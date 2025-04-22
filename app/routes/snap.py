@@ -3,10 +3,10 @@ from datetime import datetime
 from pathlib import Path
 
 from starlette.requests import Request
-from fasthtml.common import Div, Img
+from fasthtml.common import Div
 
-from app.utils import get_url_filename
-from config import SCREENSHOTS_PATH, SCREENSHOT_DIR
+from app.utils import get_url_filename, lay_brick
+from config import SCREENSHOTS_PATH
 from .api import capture_screenshot
 
 
@@ -35,11 +35,4 @@ async def snap_route(request: Request):
         index_path.write_text(json.dumps(index_data, indent=2))
 
     # Return an image tag wrapped in a brick
-    request_pathname: str = f"/static/{SCREENSHOT_DIR}/{filename}"
-    return Div(
-        Img(src=request_pathname, style="width: 100%; height: auto;"),
-        cls="brick",
-        data_src=request_pathname,
-        data_caption=f"{url} (Saved as: {filename})",
-        data_fancybox="gallery",
-    )
+    return lay_brick(url, filename)

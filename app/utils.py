@@ -1,3 +1,8 @@
+from fasthtml.common import Div, Img
+
+from config.settings import SCREENSHOT_DIR
+
+
 def get_url_filename(form) -> tuple[str | None, str]:
     url = form.get("url")
     if not url or not isinstance(url, str):
@@ -21,3 +26,18 @@ def get_url_filename(form) -> tuple[str | None, str]:
         url = f"https://{url}"
 
     return url, f"{filename}.png"
+
+
+def lay_brick(url, filename):
+    return Div(
+        Img(
+            src=f"/static/{SCREENSHOT_DIR}/{filename}",
+            style="width: 100%; height: auto;",
+            alt=f"Screenshot of {url}",
+        ),
+        cls="brick",
+        title=f"{url} (Saved as: {filename})",
+        data_src=f"/static/{SCREENSHOT_DIR}/{filename}",
+        data_caption=f"{url} (Saved as: {filename})",
+        data_fancybox="gallery",
+    )
