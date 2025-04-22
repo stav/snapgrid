@@ -1,3 +1,5 @@
+import json
+from datetime import datetime
 from pathlib import Path
 
 from starlette.requests import Request
@@ -31,8 +33,19 @@ async def snap_route(request: Request):
     filename: str = get_filename(url)
     screenshot_path: Path = SCREENSHOTS_PATH / filename
     if not screenshot_path.exists():
+        # Capture the screenshot
         screenshot: bytes = await capture_screenshot(url)
         screenshot_path.write_bytes(screenshot)
+        # Update the index
+        index_path: Path = SCREENSHOTS_PATH / "index.json"
+        if index_path.exists():
+            index_data = json.loads(index_path.read_text())
+        else:
+            index_data = {}
+        current_time = datetime.now().isoformat()
+        index_data[filename] = {"url": url, "datetime": current_time}
+        index_data = dict(sorted(index_data.items()))
+        index_path.write_text(json.dumps(index_data, indent=2))
 
     # Return an image tag wrapped in a brick
     request_pathname: str = f"/static/{SCREENSHOT_DIR}/{filename}"
