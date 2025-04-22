@@ -35,16 +35,16 @@ def index_route():
                     type="submit",
                     style="position: relative; padding: 8px 16px;",
                 ),
-                Div(  # Grid for the blocks
-                    Div(id="grid-head-node", style="display: none"),
-                    cls="grid",
-                ),
                 hx_post="/snap",
                 hx_swap="afterend",
                 hx_target="#grid-head-node",
                 hx_indicator="#spinner",
                 hx_on__before_request="this.disabled = true",
                 hx_on__after_request="this.disabled = false",
+            ),
+            Div(  # Grid for the blocks
+                Div(id="grid-head-node", style="display: none"),
+                cls="grid",
             ),
         ),
     )

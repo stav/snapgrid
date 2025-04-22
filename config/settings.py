@@ -30,10 +30,10 @@ base_config = {
             """
             document.addEventListener('DOMContentLoaded', function() {
                 Fancybox.bind("[data-fancybox]");
-                //htmx.logAll();
             });
             """
         ),
+        Script("//htmx.logAll();"),
     ],
 }
 
