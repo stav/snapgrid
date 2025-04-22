@@ -24,6 +24,18 @@
           const filename = fancybox.getAttribute('data-snapgridFilename');
           const markdownFilename = dialog.querySelector('.markdown-filename');
           markdownFilename.textContent = filename;
+          const markdownContent = dialog.querySelector('.markdown-content');
+          
+          // Fetch markdown content from the server
+          fetch(`/markdown/${filename}/`)
+            .then(response => response.text())
+            .then(content => {
+              markdownContent.innerHTML = content;
+            })
+            .catch(error => {
+              markdownContent.innerHTML = '<p>Error loading markdown content.</p>';
+              console.error('Error fetching markdown:', error);
+            });
         }
       }
     }

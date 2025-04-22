@@ -50,6 +50,7 @@ def index_route():
         Div(
             H3("Markdown Dialog"),
             P(cls="markdown-filename"),
+            Div(cls="markdown-content"),
             Button("Close", onclick="this.parentElement.style.display = 'none'"),
             style="display: none",
             id="markdown-dialog",
