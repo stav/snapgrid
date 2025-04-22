@@ -1,6 +1,6 @@
 import configparser
 from pathlib import Path
-from fasthtml.common import Link, StyleX, Script
+from fasthtml.common import Link, StyleX, Script, ScriptX
 
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,13 +26,7 @@ base_config = {
         Script(
             src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js",
         ),
-        Script(
-            """
-            document.addEventListener('DOMContentLoaded', function() {
-                Fancybox.bind("[data-fancybox]");
-            });
-            """
-        ),
+        ScriptX("app/fancybox.js"),
         Script("//htmx.logAll();"),
     ],
 }
