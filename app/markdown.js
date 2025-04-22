@@ -13,11 +13,17 @@
       }
     }
     // Open the Markdown dialog if the Fancybox dialog is open
-    const fancybox = document.querySelector('.fancybox__container[role="dialog"]');
+    const fancybox = document.querySelector(
+      '.fancybox__container[role="dialog"]'
+    );
     if (fancybox) {
       if (event.key === 'd') {
         if (dialog) {
           dialog.style.display = 'block';
+          // Set the filename in the dialog
+          const filename = fancybox.getAttribute('data-snapgridFilename');
+          const markdownFilename = dialog.querySelector('.markdown-filename');
+          markdownFilename.textContent = filename;
         }
       }
     }

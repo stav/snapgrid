@@ -37,9 +37,10 @@ async def snap_route(request: Request):
     # Return an image tag wrapped in a brick
     request_pathname: str = f"/static/{SCREENSHOT_DIR}/{filename}"
     return Div(
-        Img(src=request_pathname, style="width: 100%; height: auto;"),
+        Img(src=request_pathname, style="width: 100%; height: auto;", ),
         cls="brick",
         data_src=request_pathname,
         data_caption=f"{url} (Saved as: {filename})",
         data_fancybox="gallery",
+        data_snapgrid_filename=filename,  # Fancybox container will store this for us
     )

@@ -48,11 +48,10 @@ def index_route():
             ),
         ),
         Div(
-            H3("Custom Modal"),
-            P("Img: ${fancyboxDialog.querySelector('img').src}"),
-            P("Markdown: ${fancyboxDialog.querySelector('.markdown-text')}", id="markdown-text"),
-            Button("CloseME!", onclick="this.parentElement.style.display = 'none'"),
-            id="markdown-dialog",
+            H3("Markdown Dialog"),
+            P(cls="markdown-filename"),
+            Button("Close", onclick="this.parentElement.style.display = 'none'"),
             style="display: none",
+            id="markdown-dialog",
         ),
     )

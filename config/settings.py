@@ -26,13 +26,7 @@ base_config = {
         Script(  # Fancybox JS
             src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js",
         ),
-        Script(  # Fancybox Bind
-            """
-            document.addEventListener('DOMContentLoaded', function() {
-                Fancybox.bind("[data-fancybox]");
-            });
-            """
-        ),
+        ScriptX("app/fancybox.js"),
         ScriptX("app/markdown.js"),
         Script("//htmx.logAll();"),
     ],
