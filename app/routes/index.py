@@ -7,6 +7,9 @@ from app.utils import lay_brick
 
 
 def index_route():
+    index_file = SCREENSHOTS_PATH / "index.json"
+    index_data = json.loads(index_file.read_text(encoding="utf-8"))
+    index_data = sorted(index_data, key=lambda x: x["id"])
 
     return Titled(
         "SnapGrid",
@@ -52,13 +55,8 @@ def index_route():
                 Div(id="grid-head-node", style="display: none"),
                 # Grid body nodes loaded from index.json
                 *(
-                    [
-                        lay_brick(data["url"], filename)
-                        for filename, data in json.loads(
-                            (SCREENSHOTS_PATH / "index.json").read_text()
-                        ).items()
-                    ]
-                    if (SCREENSHOTS_PATH / "index.json").exists()
+                    [lay_brick(data["url"], data["filename"]) for data in index_data]
+                    if index_file.exists()
                     else []
                 ),
                 cls="grid",

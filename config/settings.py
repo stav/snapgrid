@@ -12,7 +12,6 @@ SCREENSHOTS_PATH.mkdir(parents=True, exist_ok=True)
 # FastHTML configuration
 base_config = {
     "host": "0.0.0.0",
-    "port": 8001,
     "debug": True,
     "static_path": str(BASE_DIR / "app"),
     "template_path": str(BASE_DIR / "app"),
