@@ -1,7 +1,14 @@
+from typing import TypedDict
+
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
 
 
-async def capture_screenshot(url: str) -> bytes:
+class SnapResponse(TypedDict):
+    screenshot: bytes
+    title: str
+
+
+async def capture_screenshot(url: str) -> SnapResponse:
     """
     Take a screenshot of the given URL using Playwright.
 
@@ -9,7 +16,7 @@ async def capture_screenshot(url: str) -> bytes:
         url (str): The URL to screenshot
 
     Returns:
-        bytes: The screenshot image data
+        dict[str, bytes]: A dictionary containing the screenshot image data
     """
     async with async_playwright() as p:
         browser: Browser = await p.chromium.launch()
@@ -112,8 +119,18 @@ async def capture_screenshot(url: str) -> bytes:
             await page.wait_for_timeout(1000)
 
             # Take screenshot of the main content
-            screenshot = await page.screenshot()
-            return screenshot
+            screenshot: bytes = await page.screenshot()
+            # Try to get OpenGraph title if available
+            title = await page.title()
+            try:
+                og_title = await page.evaluate(
+                    """() => document.querySelector('meta[property="og:title"]')?.content"""
+                )
+                if og_title:
+                    title = og_title
+            except:
+                pass
+            return {"screenshot": screenshot, "title": title}
 
         finally:
             await browser.close()

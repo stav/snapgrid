@@ -8,15 +8,15 @@ from fasthtml.common import Div
 
 from app.utils import get_url_filename, lay_brick
 from config import SCREENSHOTS_PATH
-from .api import capture_screenshot
+from .api import capture_screenshot, SnapResponse
 
 
-async def _save_screenshot(url: str, path: Path) -> None:
-    screenshot: bytes = await capture_screenshot(url)
-    path.write_bytes(screenshot)
+async def _save_screenshot(url: str, path: Path) -> str:
+    snap_data: SnapResponse = await capture_screenshot(url)
+    path.write_bytes(snap_data["screenshot"])
+    return snap_data["title"]
 
-
-def _update_index(url: str, filename: str) -> None:
+def _update_index(url: str, filename: str, title: str) -> None:
     """Update the index.json file with new screenshot data."""
     index_data: List[Dict[str, str | int]] = []
     index_path: Path = SCREENSHOTS_PATH / "index.json"
@@ -26,6 +26,7 @@ def _update_index(url: str, filename: str) -> None:
     snap_data: Dict[str, str | int] = {
         "id": len(index_data) + 1,
         "url": url,
+        "title": title,
         "filename": filename,
         "datetime": current_time,
     }
@@ -43,8 +44,8 @@ async def snap_route(request: Request):
     # Cache new screenshot if one doesn't already exist
     screenshot_path: Path = SCREENSHOTS_PATH / filename
     if not screenshot_path.exists():
-        await _save_screenshot(url, screenshot_path)
-        _update_index(url, filename)
+        title = await _save_screenshot(url, screenshot_path)
+        _update_index(url, filename, title)
 
     # Return an image tag wrapped in a brick
     return lay_brick(url, filename)
