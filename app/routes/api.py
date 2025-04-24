@@ -3,6 +3,58 @@ from typing import TypedDict
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
 
 
+# Common selectors for overlays and popups
+OVERLAY_SELECTORS = [
+    # Cookie consent
+    'button[id*="cookie"]',
+    'button[id*="consent"]',
+    'div[id*="cookie"] button',
+    'div[id*="consent"] button',
+    'button[class*="cookie"]',
+    'button[class*="consent"]',
+    # Newsletter popups
+    'div[class*="newsletter"]',
+    'div[id*="newsletter"]',
+    'div[class*="subscribe"]',
+    'div[id*="subscribe"]',
+    # General overlays
+    'div[class*="overlay"]',
+    'div[id*="overlay"]',
+    'div[class*="modal"]',
+    'div[id*="modal"]',
+    'div[class*="popup"]',
+    'div[id*="popup"]',
+    # Close buttons
+    'button[class*="close"]',
+    'button[id*="close"]',
+    'button[aria-label*="close"]',
+    'button[class*="dismiss"]',
+    'button[id*="dismiss"]',
+]
+
+# Domains to block for popups and overlays
+BLOCKED_DOMAINS = [
+    "consent.",
+    "cookie.",
+    "popup.",
+    "overlay.",
+    "newsletter.",
+    "subscription.",
+    "marketing.",
+    "tracking.",
+]
+
+# Browser context configuration
+BROWSER_CONTEXT_CONFIG = {
+    "viewport": {"width": 1920, "height": 1080},
+    "permissions": ["geolocation"],
+    "extra_http_headers": {
+        "Accept-Language": "en-US,en;q=0.9",
+        "DNT": "1",
+    },
+}
+
+
 class SnapResponse(TypedDict):
     screenshot: bytes
     title: str
@@ -20,14 +72,7 @@ async def capture_screenshot(url: str) -> SnapResponse:
     """
     async with async_playwright() as p:
         browser: Browser = await p.chromium.launch()
-        context: BrowserContext = await browser.new_context(
-            viewport={"width": 1920, "height": 1080},
-            permissions=["geolocation"],
-            extra_http_headers={
-                "Accept-Language": "en-US,en;q=0.9",
-                "DNT": "1",
-            },
-        )
+        context: BrowserContext = await browser.new_context(**BROWSER_CONTEXT_CONFIG)
         page: Page = await context.new_page()
 
         # Block common popup and overlay resources
@@ -39,59 +84,17 @@ async def capture_screenshot(url: str) -> SnapResponse:
             "**/*",
             lambda route: (
                 route.continue_()
-                if not any(
-                    domain in route.request.url
-                    for domain in [
-                        "consent.",
-                        "cookie.",
-                        "popup.",
-                        "overlay.",
-                        "newsletter.",
-                        "subscription.",
-                        "marketing.",
-                        "tracking.",
-                    ]
-                )
+                if not any(domain in route.request.url for domain in BLOCKED_DOMAINS)
                 else route.abort()
             ),
         )
 
-        # Common selectors for overlays and popups
-        overlay_selectors = [
-            # Cookie consent
-            'button[id*="cookie"]',
-            'button[id*="consent"]',
-            'div[id*="cookie"] button',
-            'div[id*="consent"] button',
-            'button[class*="cookie"]',
-            'button[class*="consent"]',
-            # Newsletter popups
-            'div[class*="newsletter"]',
-            'div[id*="newsletter"]',
-            'div[class*="subscribe"]',
-            'div[id*="subscribe"]',
-            # General overlays
-            'div[class*="overlay"]',
-            'div[id*="overlay"]',
-            'div[class*="modal"]',
-            'div[id*="modal"]',
-            'div[class*="popup"]',
-            'div[id*="popup"]',
-            # Close buttons
-            'button[class*="close"]',
-            'button[id*="close"]',
-            'button[aria-label*="close"]',
-            'button[class*="dismiss"]',
-            'button[id*="dismiss"]',
-        ]
-
-        # Try to get rid of overlays and popups
         try:
             await page.goto(url)
             await page.wait_for_load_state("networkidle")
 
             # Try to handle overlays and popups
-            for selector in overlay_selectors:
+            for selector in OVERLAY_SELECTORS:
                 try:
                     elements = await page.query_selector_all(selector)
                     for element in elements:
