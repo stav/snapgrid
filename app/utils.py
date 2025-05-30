@@ -1,6 +1,7 @@
 from fasthtml.common import Div, Img
+import json
 
-from config.settings import SCREENSHOT_DIR
+from config import SCREENSHOT_DIR, SCREENSHOTS_PATH
 
 
 def get_url_filename(form) -> tuple[str | None, str]:
@@ -41,3 +42,20 @@ def lay_brick(url, filename):
         data_caption=f"{url} (Saved as: {filename})",
         data_fancybox="gallery",
     )
+
+
+def get_index_file():
+    return SCREENSHOTS_PATH / "index.json"
+
+
+def get_index_data():
+    """Collect and sort index data from index file."""
+    SCREENSHOTS_PATH.mkdir(parents=True, exist_ok=True)
+    index_file = get_index_file()
+    if not index_file.exists():
+        # Create empty index.json with an empty list
+        index_file.write_text("[]", encoding="utf-8")
+        return []
+
+    index_data = json.loads(index_file.read_text(encoding="utf-8"))
+    return sorted(index_data, key=lambda x: x["id"])

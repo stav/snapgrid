@@ -1,16 +1,10 @@
-import json
 from fasthtml.common import Button, Div, Form, Input, Span, Titled
 from fasthtml.svg import Circle, Svg
 
-from config.settings import SCREENSHOTS_PATH
-from app.utils import lay_brick
+from app.utils import lay_brick, get_index_data
 
 
 def index_route():
-    index_file = SCREENSHOTS_PATH / "index.json"
-    index_data = json.loads(index_file.read_text(encoding="utf-8"))
-    index_data = sorted(index_data, key=lambda x: x["id"])
-
     return Titled(
         "SnapGrid",
         Div(
@@ -54,11 +48,7 @@ def index_route():
                 # Grid head node
                 Div(id="grid-head-node", style="display: none"),
                 # Grid body nodes loaded from index.json
-                *(
-                    [lay_brick(data["url"], data["filename"]) for data in index_data]
-                    if index_file.exists()
-                    else []
-                ),
+                *[lay_brick(data["url"], data["filename"]) for data in get_index_data()],
                 cls="grid",
             ),
         ),
