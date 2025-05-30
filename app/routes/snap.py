@@ -6,9 +6,9 @@ from typing import List, Dict
 from starlette.requests import Request
 from fasthtml.common import Div
 
+from app.core import capture_screenshot, SnapResponse
 from app.utils import get_url_filename, lay_brick
 from config import SCREENSHOTS_PATH
-from .api import capture_screenshot, SnapResponse
 
 
 async def _save_screenshot(url: str, path: Path) -> str:

@@ -188,4 +188,4 @@ async def capture_screenshot(url: str) -> SnapResponse:
             return {"screenshot": screenshot, "title": title}
 
         finally:
-            await browser.close()
+            await browser.close() 
