@@ -23,29 +23,20 @@ def _update_index(url: str, filename: str, title: str) -> None:
     """Update the index.json file with new screenshot data."""
     index_data: List[Dict[str, str | int]] = get_index_data()
     index_path: Path = get_index_file()
+    print("index_data1", index_data)
+    print("index_path", index_path)
 
-    # Check if snap with same URL exists
-    existing_snap = next((item for item in index_data if item["url"] == url), None)
+    snap_data: Dict[str, str | int] = {
+        "id": len(index_data) + 1,
+        "url": url,
+        "title": title,
+        "filename": filename,
+        "datetime": datetime.now().isoformat(),
+    }
+    index_data.append(snap_data)
+    print("new snap_data", snap_data)
 
-    if existing_snap:
-        # Update existing snap data while preserving ID
-        existing_snap.update(
-            {
-                "filename": filename,
-                "datetime": datetime.now().isoformat(),
-            }
-        )
-    else:
-        # Add new snap data with new ID
-        snap_data: Dict[str, str | int] = {
-            "id": len(index_data) + 1,
-            "url": url,
-            "title": title,
-            "filename": filename,
-            "datetime": datetime.now().isoformat(),
-        }
-        index_data.append(snap_data)
-
+    print("index_data2", index_data)
     index_path.write_text(json.dumps(index_data, indent=2))
 
 
